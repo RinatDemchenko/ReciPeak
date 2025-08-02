@@ -21,7 +21,7 @@ export default function Recipe({
             className="w-full max-w-md h-auto rounded-lg shadow-md mb-8 object-cover"
           />
         </div>
-        <div >
+        <div>
           <section className="w-full mb-12">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
               Ingredients
@@ -45,7 +45,10 @@ export default function Recipe({
                       {ingredient}
                     </span>
                     {measures[index] && (
-                      <span className="text-gray-600"> ({measures[index]})</span>
+                      <span className="text-gray-600">
+                        {" "}
+                        ({measures[index]})
+                      </span>
                     )}
                   </div>
                 </div>
@@ -59,7 +62,7 @@ export default function Recipe({
           Tutorial & Instructions
         </h2>
         <div className="flex flex-col items-center lg:flex-row gap-6">
-          {/* Видео-туториал (слева) */}
+          {/* Video tutorial */}
           {tutorial ? (
             <div className="w-full lg:w-1/2">
               <div className="relative w-full max-w-2xl mx-auto aspect-video">
@@ -78,7 +81,7 @@ export default function Recipe({
             </div>
           )}
 
-          {/* Инструкции (справа) */}
+          {/* Cooking instructions */}
           <div className="w-full lg:w-1/2 max-h-[500px] overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100">
             <div className="flex flex-col items-center gap-4 p-4">
               {instructions
@@ -86,8 +89,8 @@ export default function Recipe({
                 .map((step, index) => (
                   <React.Fragment key={index}>
                     <div className="flex w-full max-w-[500px] h-[100px] bg-white rounded-lg shadow-sm overflow-hidden">
-                      <div className="w-20 bg-blue-100 flex items-center justify-center">
-                        <span className="text-xl font-bold text-blue-600">
+                      <div className="w-20 bg-indigo-100 flex items-center justify-center">
+                        <span className="text-xl font-bold text-indigo-400">
                           {index + 1}
                         </span>
                       </div>
@@ -96,7 +99,7 @@ export default function Recipe({
                       </div>
                     </div>
                     {index < instructions.length - 2 && (
-                      <div className="h-10 border-l-3 border-blue-400 border-dashed"></div>
+                      <div className="h-10 border-l-3 border-indigo-400 border-dashed"></div>
                     )}
                   </React.Fragment>
                 ))}

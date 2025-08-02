@@ -10,15 +10,17 @@ export default function Meals() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /**
+   * Load all available meal categories on component mount
+   */
   useEffect(() => {
     setLoading(true);
     getAllCategories()
       .then((data) => {
         if (data.meals) {
+          // Remove duplicate categories
           const uniqueCategories = Array.from(
-            new Map(
-              data.meals.map((cat) => [cat.strCategory, cat])
-            ).values()
+            new Map(data.meals.map((cat) => [cat.strCategory, cat])).values()
           );
           setCategories(uniqueCategories);
         }
@@ -31,6 +33,9 @@ export default function Meals() {
       });
   }, []);
 
+  /**
+   * Load meals for selected category
+   */
   useEffect(() => {
     if (!selectedCategory) return;
 
@@ -50,66 +55,67 @@ export default function Meals() {
 
   return (
     <>
-    <Menu />
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
-      <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 text-center">
-        Meals by Categories
-      </h1>
+      <Menu />
+      <div className="min-h-screen bg-gray-100 p-4 sm:p-6">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-8 text-center">
+          Meals by Categories
+        </h1>
 
-      {error && (
-        <div className="text-red-500 text-center mb-4">{error}</div>
-      )}
+        {/* Error display */}
+        {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-      <div className="flex flex-wrap gap-4 justify-center mb-8">
-        {categories.map((category) => (
-          <button
-            key={category.strCategory}
-            onClick={() => setSelectedCategory(category.strCategory)}
-            className={`flex flex-col items-center p-4 rounded-lg shadow-md transition-colors ${
-              selectedCategory === category.strCategory
-                ? "bg-blue-100 border-blue-500 border-2"
-                : "bg-white hover:bg-gray-50"
-            }`}
-          >
-            <img
-              src={`https://www.themealdb.com/images/category/${category.strCategory}.png`}
-              alt={category.strCategory}
-              className="w-24 h-24 object-contain mb-2"
-              onError={(e) => (e.target.src = "/fallback-image.png")}
-            />
-            <h2 className="text-lg font-semibold text-gray-800">
-              {category.strCategory}
-            </h2>
-          </button>
-        ))}
-      </div>
-
-      {selectedCategory && (
-        <div className="w-full">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-            {selectedCategory} Meals
-          </h2>
-          {meals.length > 0 ? (
-            <div className="mt-10 flex flex-wrap justify-center gap-6">
-              {meals.map((meal) => (
-                <Dish
-                  key={meal.idMeal}
-                  image={meal.strMealThumb}
-                  name={meal.strMeal}
-                  id={meal.idMeal}
-                />
-              ))}
-            </div>
-          ) : (
-            !loading && (
-              <div className="text-center text-gray-600">
-                No meals found for {selectedCategory}
-              </div>
-            )
-          )}
+        {/* Categories grid */}
+        <div className="flex flex-wrap gap-4 justify-center mb-8">
+          {categories.map((category) => (
+            <button
+              key={category.strCategory}
+              onClick={() => setSelectedCategory(category.strCategory)}
+              className={`flex flex-col items-center p-4 rounded-lg shadow-md transition-colors ${
+                selectedCategory === category.strCategory
+                  ? "bg-indigo-100 border-indigo-500 border-2"
+                  : "bg-white hover:bg-gray-50"
+              }`}
+            >
+              <img
+                src={`https://www.themealdb.com/images/category/${category.strCategory}.png`}
+                alt={category.strCategory}
+                className="w-24 h-24 object-contain mb-2"
+                onError={(e) => (e.target.src = "/fallback-image.png")}
+              />
+              <h2 className="text-lg font-semibold text-gray-800">
+                {category.strCategory}
+              </h2>
+            </button>
+          ))}
         </div>
-      )}
-    </div>
+
+        {/* Selected category meals display */}
+        {selectedCategory && (
+          <div className="w-full">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+              {selectedCategory} Meals
+            </h2>
+            {meals.length > 0 ? (
+              <div className="mt-10 flex flex-wrap justify-center gap-6">
+                {meals.map((meal) => (
+                  <Dish
+                    key={meal.idMeal}
+                    image={meal.strMealThumb}
+                    name={meal.strMeal}
+                    id={meal.idMeal}
+                  />
+                ))}
+              </div>
+            ) : (
+              !loading && (
+                <div className="text-center text-gray-600">
+                  No meals found for {selectedCategory}
+                </div>
+              )
+            )}
+          </div>
+        )}
+      </div>
     </>
   );
 }
